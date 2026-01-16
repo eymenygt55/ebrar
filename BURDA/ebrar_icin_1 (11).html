@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>1. Ayımız Kutlu Olsun</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #ff4d6d, #ff9a9e);
+      color: #fff;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .center {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      width: 100vw;
+      position: relative;
+    }
+    .heart-container {
+      text-align: center;
+      cursor: pointer;
+      animation: pulse 1.5s infinite;
+      z-index: 10;
+    }
+    .heart-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+    .heart-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 3;
+      font-size: 1.9rem;
+      font-weight: bold;
+      letter-spacing: 2px;
+      color: #fff;
+      pointer-events: none;
+      text-shadow: 0 4px 10px rgba(0,0,0,0.35);
+    }
+    .heart {
+      width: 180px;
+      height: 180px;
+      background: #ff1e56;
+      position: relative;
+      transform: rotate(-45deg);
+      margin: 0 auto;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+      transition: transform 0.6s ease, opacity 0.6s ease;
+    }
+    .heart::before,
+    .heart::after {
+      content: "";
+      width: 180px;
+      height: 180px;
+      background: #ff1e56;
+      border-radius: 50%;
+      position: absolute;
+    }
+    .heart::before { top: -90px; left: 0; }
+    .heart::after { top: 0; left: 90px; }
+
+    .break {
+      transform: rotate(-45deg) scale(0.2);
+      opacity: 0;
+    }
+
+    .butterfly {
+      position: absolute;
+      font-size: 2rem;
+      animation: fly 3s ease-out forwards;
+      pointer-events: none;
+    }
+
+    @keyframes fly {
+      0% { transform: translate(0,0) scale(0.5); opacity: 1; }
+      100% { transform: translate(var(--x), -300px) scale(1.2); opacity: 0; }
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+      100% { transform: scale(1); }
+    }
+
+    .page2 {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+      padding: 20px;
+      animation: fadeIn 1.2s ease forwards;
+    }
+    .page2 h1 {
+      font-size: 2.2rem;
+      line-height: 1.5;
+      margin: 0;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Page 1 -->
+  <div class="center" id="page1">
+    <div class="heart-container" onclick="goNext()">
+      <div class="heart-wrapper">
+        <div class="heart-text">16 Aralık</div>
+        <div class="heart"></div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- Page 2 -->
+  <div class="center page2" id="page2">
+    <h1>
+      İlk ayımız kutlu olsun<br>
+      çiçeğim 🌸<br><br>
+      ❤️ İyi ki varsın ❤️
+    </h1>
+  </div>
+
+  <audio id="music" src="olmazlara-inat.mp3" loop></audio>
+
+  <script>
+    function goNext() {
+      // titreşim (mobil)
+      if (navigator.vibrate) navigator.vibrate([120, 60, 120]);
+
+      // kalp parçalanma
+      const heart = document.querySelector('.heart');
+      heart.classList.add('break');
+
+      // kelebekler
+      for (let i = 0; i < 8; i++) {
+        const b = document.createElement('div');
+        b.className = 'butterfly';
+        b.innerText = '🦋';
+        b.style.left = '50%';
+        b.style.top = '50%';
+        b.style.setProperty('--x', (Math.random()*400 - 200) + 'px');
+        document.body.appendChild(b);
+        setTimeout(() => b.remove(), 3000);
+      }
+
+      setTimeout(() => {
+        document.getElementById('page1').style.display = 'none';
+        const p2 = document.getElementById('page2');
+        p2.style.display = 'flex';
+        const music = document.getElementById('music');
+        music.volume = 0.8;
+        music.play();
+      }, 600);
+    }
+  </script>
+</body>
+</html>
